@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Haven
 
-## Getting Started
+**Haven** est un dashboard SaaS pour indie hackers et développeurs solo qui veulent gérer plusieurs projets [PocketBase](https://pocketbase.io) sur leur propre VPS — base de données, authentification et stockage de fichiers inclus, sans limite de projets et pour un coût minimal.
 
-First, run the development server:
+## Fonctionnalités (MVP)
+
+- Page d'accueil publique
+- Authentification via PocketBase
+- Liste des projets avec statut (en ligne / arrêté), stockage utilisé
+- Lien direct vers l'admin PocketBase de chaque projet
+- Page paramètres (nom du projet, domaine personnalisé)
+
+## Stack technique
+
+| Technologie | Rôle |
+|---|---|
+| [Next.js 14](https://nextjs.org) (App Router) | Framework frontend |
+| [TypeScript](https://www.typescriptlang.org) | Typage strict |
+| [Tailwind CSS](https://tailwindcss.com) | Styles |
+| [Shadcn/ui](https://ui.shadcn.com) | Composants UI |
+| [PocketBase](https://pocketbase.io) | Backend (BDD, auth, storage) |
+
+## Lancer le projet en local
+
+### Prérequis
+
+- Node.js 18+
+- Une instance [PocketBase](https://pocketbase.io/docs/) en cours d'exécution
+
+### 1. Cloner le repo
+
+```bash
+git clone https://github.com/denjs18/haven.git
+cd haven
+```
+
+### 2. Installer les dépendances
+
+```bash
+npm install
+```
+
+### 3. Configurer les variables d'environnement
+
+```bash
+cp .env.example .env.local
+```
+
+Éditez `.env.local` et renseignez l'URL de votre instance PocketBase :
+
+```env
+NEXT_PUBLIC_POCKETBASE_URL=http://127.0.0.1:8090
+```
+
+### 4. Démarrer PocketBase
+
+Téléchargez PocketBase depuis [pocketbase.io](https://pocketbase.io/docs/) et lancez-le :
+
+```bash
+./pocketbase serve
+```
+
+L'interface admin sera disponible sur `http://127.0.0.1:8090/_/`
+
+### 5. Démarrer l'app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L'application sera disponible sur [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Structure du projet
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+haven/
+├── app/
+│   ├── (auth)/
+│   │   └── login/          # Page de connexion
+│   ├── (dashboard)/
+│   │   ├── projects/       # Liste des projets
+│   │   ├── settings/       # Paramètres du projet
+│   │   └── layout.tsx      # Layout avec navigation
+│   ├── layout.tsx          # Layout racine
+│   └── page.tsx            # Page d'accueil publique
+├── components/
+│   └── ui/                 # Composants Shadcn/ui
+├── lib/
+│   ├── pocketbase.ts       # Client PocketBase singleton
+│   ├── types.ts            # Types TypeScript
+│   └── utils.ts            # Utilitaires (cn)
+└── public/                 # Assets statiques
+```
 
-## Learn More
+## Roadmap
 
-To learn more about Next.js, take a look at the following resources:
+- [ ] Création de nouvelles instances PocketBase via l'UI
+- [ ] Démarrage / arrêt des instances
+- [ ] Métriques en temps réel (CPU, mémoire, stockage)
+- [ ] Domaines personnalisés avec certificats SSL automatiques
+- [ ] Sauvegardes automatiques
+- [ ] Multi-utilisateurs / équipes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Licence
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
