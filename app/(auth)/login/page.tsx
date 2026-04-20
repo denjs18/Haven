@@ -21,6 +21,11 @@ export default function LoginPage() {
     try {
       const pb = getPocketBase()
       await pb.collection('users').authWithPassword(email, password)
+
+      // Persister le token dans un cookie pour le middleware
+      const cookie = pb.authStore.exportToCookie({ httpOnly: false, secure: false, sameSite: 'Lax' })
+      document.cookie = cookie
+
       router.push('/projects')
     } catch {
       setError('Email ou mot de passe incorrect.')
@@ -50,6 +55,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               required
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="vous@exemple.com"
@@ -65,6 +71,7 @@ export default function LoginPage() {
               id="password"
               type="password"
               required
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
@@ -72,9 +79,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
+          {error && <p className="text-sm text-destructive">{error}</p>}
 
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? 'Connexion…' : 'Se connecter'}

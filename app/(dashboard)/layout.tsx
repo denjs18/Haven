@@ -1,12 +1,13 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { LayoutDashboard, Settings, LogOut } from 'lucide-react'
+import { useAuth } from '@/components/auth-provider'
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { user, logout } = useAuth()
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -27,12 +28,20 @@ export default function DashboardLayout({
               <span className="hidden sm:inline">Paramètres</span>
             </Button>
           </Link>
-          <Link href="/login">
-            <Button variant="ghost" size="sm" className="gap-1.5 text-sm text-muted-foreground">
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Déconnexion</span>
-            </Button>
-          </Link>
+          {user && (
+            <span className="hidden sm:inline text-xs text-muted-foreground px-2">
+              {user.email}
+            </span>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="gap-1.5 text-sm text-muted-foreground"
+            onClick={logout}
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden sm:inline">Déconnexion</span>
+          </Button>
         </nav>
       </header>
 
